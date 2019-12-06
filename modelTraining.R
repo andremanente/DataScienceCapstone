@@ -97,7 +97,7 @@ for(i in grep("txt$", dir("data/train"), value = T)){
 fileURL <- "http://www.freewebheaders.com/wordpress/wp-content/uploads/full-list-of-bad-words-banned-by-google-txt-file.zip"
 download.file(fileURL, "data/profanityWords.zip")
 unzip("data/profanityWords.zip", exdir = "data")
-file.rename(file.path("data", grep("full-list", dir("data"), val=T)), "data/profanityWords.txt")
+file.rename(file.path("data", grep("full-list", dir("data"), val=T)), "data/profanitywords.txt")
 
 cleanPCorpus("data/train/train")
 cleanPCorpus("data/train/holdout")
@@ -239,7 +239,6 @@ rm(list=ls())
 # Create short list of top 25 n-grams for app
 ################################################################################
 
-
 saveDir <- "data/train/train/clean/smooth"
 files <- file.path(saveDir, dir(saveDir))
 shortList <- list()
@@ -260,7 +259,7 @@ shortList[[5]] <- makeShortList(files[5])
 shortList[[6]] <- makeShortList(files[6])
 
 saveRDS(shortList, file.path(saveDir, "shortList.rds"))
-file.copy(file.path(saveDir, "shortList.rds"), "data/shortList.rds", overwrite = TRUE)
+file.copy(file.path(saveDir, "shortList.rds"), "textPredictor/data/shortList.rds", overwrite = TRUE)
 rm(list=ls())
 
 ################################################################################
@@ -289,9 +288,8 @@ write(t, file.path(sampleDir, "sample.twit.txt"))
 sampleText <- data.frame(text = c(b, n, t), source = rep(c("blog", "news", "twitter"), each =20))
 sampleText$text <- as.character(sampleText$text)
 saveRDS(sampleText, "data/train/train/samples/sampleText.rds")
-file.copy("data/train/train/samples/sampleText.rds", "data/sampleText.rds")
+file.copy("data/train/train/samples/sampleText.rds", "textPredictor/data/sampleText.rds")
 rm(list=ls())
-
 
 ################################################################################
 # prune n-gram list to only have top 5 completions
@@ -313,8 +311,8 @@ saveRDS(ng, f1)
 ng <- lapply(ng, function(x) x[ freq > 5 ])
 f2 <- "data/train/train/clean/smooth/ngrams_smooth_trim5_prune.rds"
 saveRDS(ng, f2)
-file.copy(f1, file.path("data", basename(f1)))
-file.copy(f2, file.path("data", basename(f2)))
+file.copy(f1, file.path("textPredictor/data", basename(f1)))
+file.copy(f2, file.path("textPredictor/data", basename(f2)))
 
 ################################################################################
 # Create benchmarking test data to test model accuracy and speed
@@ -390,7 +388,7 @@ results <- data.frame(model=c("smooth_trim5_prune", "smooth_trim1_prune"),
                                  time_trim1[1]/1000))
 results[,2:5] <- round(results[,2:5], 3)
 saveRDS(results, "data/test/clean/results.rds")
-file.copy("data/test/clean/results.rds", "data/results.rds")
+file.copy("data/test/clean/results.rds", "textPredictor/data/results.rds")
 
 
 ## Check to see which ngram length was searched for the result

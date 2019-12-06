@@ -74,7 +74,7 @@ cleanPCorpus <- function(x) {
     swap <- content_transformer(function(x, from, to) gsub(from, to, x))
     corp <- tm_map(corp, content_transformer(tolower))
     # Remove profanity words
-    profanityWords <- readLines(con="data/profanityWords.txt", skipNul = T)
+    profanityWords <- readLines(con="data/profanitywords.txt", skipNul = T)
     corp <- tm_map(corp, removeWords, profanityWords)
     print("PROFANITY REMOVAL COMPLETE...")
     # Replace all foreign unicode character codes with a space
@@ -124,7 +124,7 @@ cleanTextFull <- function(x) {
     x <- VCorpus(VectorSource(x))
     swap <- content_transformer(function(x, from, to) gsub(from, to, x))
     x <- tm_map(x, content_transformer(tolower))
-    profanityWords <- readLines(con="data/profanityWords.txt", skipNul = T)
+    profanityWords <- readLines(con="data/profanitywords.txt", skipNul = T)
     x <- tm_map(x, removeWords, profanityWords)
     x <- tm_map(x, swap, "<.*>", " ")
     x <- tm_map(x, swap, "#[a-z]+", " ")
